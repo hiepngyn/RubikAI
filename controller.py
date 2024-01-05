@@ -15,8 +15,7 @@ def main():
     rubiks_cube = RubiksCube()
 
     # Prepare the scramble moves
-    #moves = scramble_conversion("U2 L R2 D U' L2 R'")
-    moves = scramble_conversion("U2 L")
+    moves = scramble_conversion("U2 U' D2 D'")
     move_index = 0  # Index to track which move we are on
     last_move_time = 0
     move_delay = 1  # Delay in seconds between moves
@@ -39,18 +38,18 @@ def main():
             move = moves[move_index]
             prime = move < 0
             move = abs(move)
-            if move == 1:  # L move
-                rubiks_cube.verticle_turn(0, not prime)
-            elif move == 2:  # R move
-                rubiks_cube.verticle_turn(2, prime)
-            elif move == 3:  # U move
-                rubiks_cube.horizontal_turn(0, not prime)
+            #if move == 1:  # L move
+                #rubiks_cube.verticle_turn(0, not prime)
+            #elif move == 2:  # R move
+                #rubiks_cube.verticle_turn(2, prime)
+            if move == 3:  # U move
+                rubiks_cube.horizontal_turn(0, prime)
             elif move == 4:  # D move
                 rubiks_cube.horizontal_turn(2, prime)
-            elif(abs(move) == 5): #B move
-                    rubiks_cube.face_turn(0,prime)
-            elif(abs(move) == 6): #F move
-                    rubiks_cube.face_turn(0, prime)
+            #elif(abs(move) == 5): #B move
+                #rubiks_cube.face_turn(0,prime)
+            #elif(abs(move) == 6): #F move
+                #rubiks_cube.face_turn(0, prime)
             last_move_time = current_time
             move_index += 1
         screen.fill((0, 0, 0))  # Fill the screen with black background

@@ -11,14 +11,6 @@ class RubiksCube:
                 [[5,0,0],[5,0,1],[5,0,2],[5,1,0],[5,1,1],[5,1,2],[5,2,0],[5,2,1],[5,2,2]] # Bottom Face (Yellow Core)
             ] 
         
-        # need to find out why back face not updating.
-        [[[2, 0, 0], [0, 0, 1], [0, 0, 2], [2, 1, 0], [0, 1, 1], [0, 1, 2], [2, 2, 0], [0, 2, 1], [0, 2, 2]], 
-         [[1, 0, 0], [1, 0, 1], [1, 0, 2], [1, 1, 0], [1, 1, 1], [1, 1, 2], [1, 2, 0], [1, 2, 1], [1, 2, 2]], 
-        [[5, 0, 0], [2, 0, 1], [2, 0, 2], [5, 1, 0], [2, 1, 1], [2, 1, 2], [5, 2, 0], [2, 2, 1], [2, 2, 2]], 
-        [[3, 0, 0], [3, 0, 1], [3, 0, 2], [3, 1, 0], [3, 1, 1], [3, 1, 2], [3, 2, 0], [3, 2, 1], [3, 2, 2]], 
-        [[4, 0, 0], [4, 0, 1], [4, 0, 2], [4, 1, 0], [4, 1, 1], [4, 1, 2], [4, 2, 0], [4, 2, 1], [4, 2, 2]], 
-        [[0, 0, 0], [5, 0, 1], [5, 0, 2], [0, 1, 0], [5, 1, 1], [5, 1, 2], [2, 2, 0], [5, 2, 1], [5, 2, 2]]]
-    
     def scramble_cube(self,scramble_pattern):
         """ This will handle a scrambling
         pattern. There are 6 different notations
@@ -43,18 +35,81 @@ class RubiksCube:
                 self.horizontal_turn(2,False)
             if(s == "D'"):
                 self.horizontal_turn(2,True) 
+    
+    def save_face(face):
+        """
+        This takes in a face of the cube and return the face_color_pos_map.
+        The map will tell you what the current position of each tile is,
+        the color, and x/y pos. This will be used when we rotate a layer
+        horizontally as we need to shift the position of all the colors on the
+        appropriate layer.
+        """
+        face_color_pos_map = {}
+        index = 0
+        for tile in face:
+            index = 0
+            color = tile[0]
+            x_pos = tile[1]
+            y_pos = tile[2]
+
+            data = (color, x_pos, y_pos)
+
+            face_color_pos_map[index] = data
+            index+=1
 
 
+    def horizontal_turn(self,row,prime):
+        if row == 0: # Top row U or U'
+            # Get row information of current rows that will be edited
+            left_face_row =[self.cube[1][color] for color in range(3)] # This gets every color for the top row (0-2)
+            front_face_row = [self.cube[2][color] for color in range(3)] 
+            right_face_row = [self.cube[3][color] for color in range(3)]
+            back_face_row = [self.cube[4][color] for color in range(3)]
+     
+            if prime == False: #U move
+                for tile in range (0,3):
+                    self.cube[1][tile] = front_face_row[tile]
+                    self.cube[2][tile] = right_face_row[tile]
+                    self.cube[3][tile] = back_face_row[tile]
+                    self.cube[4][tile] = left_face_row[tile]
+            else: #U' move
+                for tile in range (0,3):
+                    self.cube[1][tile] = back_face_row[tile]
+                    self.cube[2][tile] = left_face_row[tile]
+                    self.cube[3][tile] = front_face_row[tile]
+                    self.cube[4][tile] = right_face_row[tile]
 
+        elif row == 2: #Bottom row D or D'
+            # Get row information of current rows that will be edited
+            left_face_row =[self.cube[1][color] for color in range(6,9)] # This gets every color for the top row (0-2)
+            front_face_row = [self.cube[2][color] for color in range(6,9)] 
+            right_face_row = [self.cube[3][color] for color in range(6,9)]
+            back_face_row = [self.cube[4][color] for color in range(6,9)]
+
+            if prime == False: #D move
+                for tile in range (6,8):
+                    self.cube[1][tile] = back_face_row[tile]
+                    self.cube[2][tile] = left_face_row[tile]
+                    self.cube[3][tile] = front_face_row[tile]
+                    self.cube[4][tile] = right_face_row[tile]
+            else: #D' move
+                for tile in range (6,8):
+                    self.cube[1][tile] = front_face_row[tile]
+                    self.cube[2][tile] = right_face_row[tile]
+                    self.cube[3][tile] = back_face_row[tile]
+                    self.cube[4][tile] = left_face_row[tile]
+
+"""
     def horizontal_turn(self,layer,prime):
-        """ This simulates a horizontal turn.
+        This simulates a horizontal turn.
         The layer is given 0 being top, 1 being middle, and 2
         being the lowest layer.
         A none prime turns the layer clockwise, and prime
         turns are counter clockwise.
-        """
+        
         if not prime: #Clock wise rotation
             layer_offset = layer * 3
+
             front_face_row = [self.cube[2][layer_offset],self.cube[2][layer_offset+1],self.cube[2][layer_offset+2]]
             left_face_row = [self.cube[1][layer_offset],self.cube[1][layer_offset+1],self.cube[1][layer_offset+2]]
             right_face_row = [self.cube[3][layer_offset],self.cube[3][layer_offset+1],self.cube[3][layer_offset+2]]
@@ -70,6 +125,8 @@ class RubiksCube:
                         self.cube[x][layer_offset+y] = front_face_row[y]
                     elif(x == 4): # Sets back face with previous right row
                         self.cube[x][layer_offset+y] = right_face_row[y]
+            
+
 
         if prime: #Counter clock wise rotation
             layer_offset = layer * 3
@@ -90,12 +147,12 @@ class RubiksCube:
                         self.cube[x][layer_offset+y] = left_face_row[y]
         
     def verticle_turn(self, column, prime):
-        """ This simulates a verticle turn.
+        This simulates a verticle turn.
         The column is given 0 being left, 1 being middle, and 2
         being the rightmost column.
         A none prime turns the column clockwise, and prime
         turns are counter clockwise.
-        """
+        
         # Define column indices
         columns = [0, 3, 6] if column == 0 else [1, 4, 7] if column == 1 else [2, 5, 8]
 
@@ -123,3 +180,13 @@ class RubiksCube:
 
     def face_turn(self,column,prime):
         print("WOP")
+"""                
+
+
+
+
+
+
+
+        
+
