@@ -1,3 +1,5 @@
+import visual
+
 class RubiksCube:
     def __init__(self):
         self.cube = [
@@ -155,10 +157,3 @@ class RubiksCube:
 
 
 
-
-
-cube = RubiksCube()
-cube.verticle_turn(0,False)
-
-
-print(cube.cube)

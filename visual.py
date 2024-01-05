@@ -1,32 +1,48 @@
 import pygame
 
-# Pygame setup
-pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-clock = pygame.time.Clock()
-
 # Define draw_2D function outside the game loop
-def draw_2D(cube):
-    # Define the position and size of the square
-    x, y = 100, 100  # Position of the square
-    size = 10  # Size of the square
+def draw_2D(screen, cube):
+    """
+          0
+        1 2 3 4
+          5
+    """
 
-    # Define the color of the square (RGB)
-    color = (255, 0, 0)  # Red
+    draw_3x3(200,200,cube[0],screen,20)
+    draw_3x3(125,275,cube[1],screen,20)
+    draw_3x3(200,275,cube[2],screen,20)
+    draw_3x3(275,275,cube[3],screen,20)
+    draw_3x3(350,275,cube[4],screen,20)
+    draw_3x3(200,350,cube[5],screen,20)
 
-    # Draw the square
-    pygame.draw.rect(screen, color, pygame.Rect(x, y, size, size))
-    
-# Game loop
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
 
-    screen.fill("white")
-    draw_2D()  # Call draw_2D inside the game loop
-    pygame.display.flip()
-    clock.tick(60)
 
-pygame.quit()
+
+
+
+def draw_3x3(x, y, face, screen, size):
+    """
+    Draws a 3x3 square representing
+    a side given the top left x and y
+    coord and the face array
+    """
+    color_map = {
+        0: (255, 255, 255),  # white
+        1: (0, 128, 0),      # green
+        2: (255, 0, 0),      # red
+        3: (0, 0, 255),      # blue
+        4: (255, 165, 0),    # orange
+        5: (255, 255, 0)     # yellow
+    }
+
+    curr_x = x
+    x_count = 0
+    for tiles in range(9):
+        pygame.draw.rect(screen, color_map[face[tiles][0]], pygame.Rect(curr_x, y, size, size))
+        curr_x += size + 5
+        x_count += 1
+
+        if x_count == 3:  # End of current row, reset for new row
+            curr_x = x
+            y += size + 5
+            x_count = 0
