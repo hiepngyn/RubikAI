@@ -121,6 +121,5 @@ class RubiksCube:
                 self.cube[5][i] = front_face_column[2 - columns.index(i)]
                 self.cube[4][i] = bottom_face_column[2 - columns.index(i)]
 
-
-
-
+    def face_turn(self,column,prime):
+        print("WOP")
