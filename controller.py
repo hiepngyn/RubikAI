@@ -27,7 +27,7 @@ def main():
         clock.tick(60)
 
         time.sleep(3)
-        rubiks_cube.horizontal_turn(0,False)
+        rubiks_cube.verticle_turn(0,False)
         draw_2D(screen,rubiks_cube.cube)
         
 

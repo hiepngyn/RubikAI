@@ -96,63 +96,30 @@ class RubiksCube:
         A none prime turns the column clockwise, and prime
         turns are counter clockwise.
         """
+        # Define column indices
+        columns = [0, 3, 6] if column == 0 else [1, 4, 7] if column == 1 else [2, 5, 8]
 
-        left_column = [0,3,6]
-        middle_column = [1,4,7]
-        right_column = [2,5,8]
+        # Extract columns from each face
+        top_face_column = [self.cube[0][i] for i in columns]
+        front_face_column = [self.cube[2][i] for i in columns]
+        bottom_face_column = [self.cube[5][i] for i in columns]
+        back_face_column = [self.cube[4][i] for i in columns]
+
+        # Rotate columns clockwise or counter-clockwise
         if not prime:
-            if column == 0:
-                top_face_column = [self.cube[0][left_column[0]],self.cube[0][left_column[1]],self.cube[2][left_column[2]]]
-                front_face_column = [self.cube[2][left_column[0]],self.cube[2][left_column[1]],self.cube[2][left_column[2]]]
-                bottom_face_column = [self.cube[5][left_column[0]],self.cube[5][left_column[1]],self.cube[5][left_column[2]]]
-                back_face_column = [self.cube[4][left_column[0]],self.cube[4][left_column[1]],self.cube[4][left_column[2]]]
-
-                for x in range (0,6):
-                    if x != 1 or 3:
-                        for y in range (0,3):
-                            if x == 0: # Sets Top Face to be prev front column
-                                self.cube[0][left_column[y]] = front_face_column[y]
-                            if x == 2: # Sets Front Face to be prev bottom column
-                                self.cube[2][left_column[y]] = bottom_face_column[y]
-                            if x == 4: # Sets Bottom Face to be prev back column
-                                self.cube[4][left_column[y]] = back_face_column[y]
-                            if x == 5: # Sets Back Face to be prev top column
-                                self.cube[5][left_column[y]] = top_face_column[y]
-
-            elif column == 1:
-                top_face_column = [self.cube[0][middle_column[0]],self.cube[0][middle_column[1]],self.cube[2][middle_column[2]]]
-                front_face_column = [self.cube[2][middle_column[0]],self.cube[2][middle_column[1]],self.cube[2][middle_column[2]]]
-                bottom_face_column = [self.cube[5][middle_column[0]],self.cube[5][middle_column[1]],self.cube[5][middle_column[2]]]
-                back_face_column = [self.cube[4][middle_column[0]],self.cube[4][middle_column[1]],self.cube[4][middle_column[2]]]
-
-                for x in range (0,6):
-                    if x != 1 or 3:
-                        for y in range (0,3):
-                            if x == 0: # Sets Top Face to be prev front column
-                                self.cube[0][middle_column[y]] = front_face_column[y]
-                            if x == 2: # Sets Front Face to be prev bottom column
-                                self.cube[2][middle_column[y]] = bottom_face_column[y]
-                            if x == 4: # Sets Bottom Face to be prev back column
-                                self.cube[4][middle_column[y]] = back_face_column[y]
-                            if x == 5: # Sets Back Face to be prev top column
-                                self.cube[5][middle_column[y]] = top_face_column[y]
-            elif column == 2:
-                top_face_column = [self.cube[0][right_column[0]],self.cube[0][right_column[1]],self.cube[2][right_column[2]]]
-                front_face_column = [self.cube[2][right_column[0]],self.cube[2][right_column[1]],self.cube[2][right_column[2]]]
-                bottom_face_column = [self.cube[5][right_column[0]],self.cube[5][right_column[1]],self.cube[5][right_column[2]]]
-                back_face_column = [self.cube[4][right_column[0]],self.cube[4][right_column[1]],self.cube[4][right_column[2]]]     
-
-                for x in range (0,6):
-                    if x != 1 or 3:
-                        for y in range (0,3):
-                            if x == 0: # Sets Top Face to be prev front column
-                                self.cube[0][right_column[y]] = front_face_column[y]
-                            if x == 2: # Sets Front Face to be prev bottom column
-                                self.cube[2][right_column[y]] = bottom_face_column[y]
-                            if x == 4: # Sets Bottom Face to be prev back column
-                                self.cube[4][right_column[y]] = back_face_column[y]
-                            if x == 5: # Sets Back Face to be prev top column
-                                self.cube[5][right_column[y]] = top_face_column[y]
+            # Clockwise rotation
+            for i in columns:
+                self.cube[0][i] = front_face_column[2 - columns.index(i)]
+                self.cube[2][i] = bottom_face_column[2 - columns.index(i)]
+                self.cube[5][i] = back_face_column[2 - columns.index(i)]
+                self.cube[4][i] = top_face_column[2 - columns.index(i)]
+        else:
+            # Counter-clockwise rotation
+            for i in columns:
+                self.cube[0][i] = back_face_column[2 - columns.index(i)]
+                self.cube[2][i] = top_face_column[2 - columns.index(i)]
+                self.cube[5][i] = front_face_column[2 - columns.index(i)]
+                self.cube[4][i] = bottom_face_column[2 - columns.index(i)]
 
 
 
