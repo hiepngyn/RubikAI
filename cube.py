@@ -3,7 +3,7 @@ import visual
 class RubiksCube:
     def __init__(self):
         self.cube = [
-                [[0,0,0],[0,0,1],[0,0,2],[0,1,0],[0,1,1],[0,1,2],[0,2,0],[0,2,1],[0,2,2]], # Top Face (White Core)
+                [[0,0,0],[0,0,1],[0,0,2],[3,1,0],[0,1,1],[0,1,2],[0,2,0],[0,2,1],[0,2,2]], # Top Face (White Core)
                 [[1,0,0],[1,0,1],[1,0,2],[1,1,0],[1,1,1],[1,1,2],[1,2,0],[1,2,1],[1,2,2]], # Left Face (Green Core)
                 [[2,0,0],[2,0,1],[2,0,2],[2,1,0],[2,1,1],[2,1,2],[2,2,0],[2,2,1],[2,2,2]], # Front Face (Red Core)
                 [[3,0,0],[3,0,1],[3,0,2],[3,1,0],[3,1,1],[3,1,2],[3,2,0],[3,2,1],[3,2,2]], # Right Face (Blue Core)
@@ -56,7 +56,22 @@ class RubiksCube:
 
             face_color_pos_map[index] = data
             index+=1
+    
+    def clockwise_face_rotation(self, face):
+        """"
+        0 1 2   6 3 0
+        3 4 5 ->7 4 1
+        6 7 8   8 5 2
+        """
+        new_face = [face[6], face[3], face[0], face[7], face[4], face[1], face[8], face[5], face[2]]
 
+        # Now we have the colors correct but the next two indexes of each new_face entry are wrong as they are the previous pos
+        for tiles in new_face:
+            for y in range (0,4):
+                for x in range (0,4):
+                    tiles[1] = x
+                    tiles[2] = y
+        return new_face
 
     def horizontal_turn(self,row,prime):
         if row == 0: # Top row U or U'
@@ -72,6 +87,7 @@ class RubiksCube:
                     self.cube[2][tile] = right_face_row[tile]
                     self.cube[3][tile] = back_face_row[tile]
                     self.cube[4][tile] = left_face_row[tile]
+                self.cube[0] = self.clockwise_face_rotation(self.cube[0])
             else: #U' move
                 for tile in range (0,3):
                     self.cube[1][tile] = back_face_row[tile]
