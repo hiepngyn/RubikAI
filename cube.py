@@ -175,48 +175,70 @@ class RubiksCube:
                     self.cube[4][back_columns[i]] = bottom_face_column[i]
                 # Rotate right face counter-clockwise
                 self.cube[3] = self.counter_clockwise_face_rotation(self.cube[3])
+    
+    def face_turn(self, face, prime):
+        """
+        top_face_row = [self.cube[0][tile] for tile in range(6,9)] if face == 0 else [self.cube[0][tile] for tile in range (0,3)]
+        right_face_row = [self.cube[3][tile*3] for tile in range(3)] if face == 0 else [self.cube[0][tile] for tile in range (2,9,3)]
+        left_face_row = [self.cube[1][tile] for tile in range(2,9,3)] if face == 0 else [self.cube[0][tile*3] for tile in range (0,3)]
+        bottom_face_row = [self.cube[5][tile] for tile in range(3)] if face == 0 else [self.cube[0][tile] for tile in range (6,9)]
+        """
+        if (face == 0):
+            top_face_row = [self.cube[0][tile] for tile in range(6,9)]
+            right_face_row = [self.cube[3][tile*3] for tile in range(3)]
+            left_face_row = [self.cube[1][tile] for tile in range(2,9,3)]
+            bottom_face_row = [self.cube[5][tile] for tile in range(3)]
+        elif(face == 1):
+            top_face_row = [self.cube[0][tile] for tile in range (0,3)]
+            right_face_row = [self.cube[3][tile] for tile in range (2,9,3)]
+            left_face_row = [self.cube[1][tile*3] for tile in range (0,3)]
+            bottom_face_row = [self.cube[5][tile] for tile in range (6,9)]
+
+        if(face == 0):
+            if(not prime): #F
+                left_face_row = left_face_row[::-1]
+                right_face_row = right_face_row[::-1]
+                #Need to reverse to account for mirror on bottom
+                for tile in range(3):
+                    self.cube[0][tile+6] = left_face_row[tile] #6,7,8
+                    self.cube[3][tile*3] = top_face_row[tile] #0,3,6
+                    self.cube[5][tile] = right_face_row[tile] #0,1,2
+                    self.cube[1][(tile*3) + 2] = bottom_face_row[tile] #2,5,8
+                self.cube[2] = self.clockwise_face_rotation(self.cube[2])
+            else: #F'
+                top_face_row = top_face_row[::-1]
+                bottom_face_row = bottom_face_row[::-1]
+                for tile in range(3):
+                    self.cube[0][tile+6] = right_face_row[tile] #6,7,8
+                    self.cube[3][tile*3] = bottom_face_row[tile] #0,3,6
+                    self.cube[5][tile] = left_face_row[tile] #0,1,2
+                    self.cube[1][(tile*3) + 2] = top_face_row[tile] #2,5,8
+                self.cube[2] = self.counter_clockwise_face_rotation(self.cube[2])
+        elif(face == 1):
+            if(not prime): #B
+                print('b')
+                bottom_face_row = bottom_face_row[::-1]
+                top_face_row = top_face_row[::-1]
+                for tile in range(3):
+                    self.cube[0][tile] = right_face_row[tile] #0,1,2
+                    self.cube[3][(tile*3) + 2] = bottom_face_row[tile] #2,5,8
+                    self.cube[5][tile+6] = left_face_row[tile] #6,7,8
+                    self.cube[1][tile*3] = top_face_row[tile] #0,3,6
+                self.cube[4] = self.clockwise_face_rotation(self.cube[4])
+            else: #B'
+                right_face_row = right_face_row[::-1]
+                left_face_row = left_face_row[::-1]
+                for tile in range(3):
+                    self.cube[0][tile] = left_face_row[tile] #0,1,2
+                    self.cube[3][(tile*3) + 2] = top_face_row[tile] #2,5,8
+                    self.cube[5][tile+6] = right_face_row[tile] #6,7,8
+                    self.cube[1][tile*3] = bottom_face_row[tile] #0,3,6
+                self.cube[4] = self.counter_clockwise_face_rotation(self.cube[4])
         
 
 
 
 
-
-"""
-    def vertical_turn(self, column, prime):
-        This simulates a verticle turn.
-        The column is given 0 being left, 1 being middle, and 2
-        being the rightmost column.
-        A none prime turns the column clockwise, and prime
-        turns are counter clockwise.
-        
-        # Define column indices
-        columns = [0, 3, 6] if column == 0 else [1, 4, 7] if column == 1 else [2, 5, 8]
-
-        # Extract columns from each face
-        top_face_column = [self.cube[0][i] for i in columns]
-        front_face_column = [self.cube[2][i] for i in columns]
-        bottom_face_column = [self.cube[5][i] for i in columns]
-        back_face_column = [self.cube[4][i] for i in columns]
-
-        # Rotate columns clockwise or counter-clockwise
-        if not prime:
-            # Clockwise rotation
-            for i in columns:
-                self.cube[0][i] = front_face_column[2 - columns.index(i)]
-                self.cube[2][i] = bottom_face_column[2 - columns.index(i)]
-                self.cube[5][i] = back_face_column[2 - columns.index(i)]
-                self.cube[4][i] = top_face_column[2 - columns.index(i)]
-        else:
-            # Counter-clockwise rotation
-            for i in columns:
-                self.cube[0][i] = back_face_column[2 - columns.index(i)]
-                self.cube[2][i] = top_face_column[2 - columns.index(i)]
-                self.cube[5][i] = front_face_column[2 - columns.index(i)]
-                self.cube[4][i] = bottom_face_column[2 - columns.index(i)]
-
-    def face_turn(self,column,prime):
-        print("WOP")
-"""                
 
 
 
