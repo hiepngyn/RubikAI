@@ -11,9 +11,9 @@ def draw_2D(screen, cube):
     draw_3x3(200,200,cube[0],screen,20)
     draw_3x3(125,275,cube[1],screen,20)
     draw_3x3(200,275,cube[2],screen,20)
-    draw_right_face(275,275,cube[3],screen,20)
+    draw_3x3(275,275,cube[3],screen,20)
     draw_3x3(350,275,cube[4],screen,20)
-    draw_bottom_face(200,350,cube[5],screen,20)
+    draw_3x3(200,350,cube[5],screen,20)
 
 
 

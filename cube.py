@@ -87,6 +87,7 @@ class RubiksCube:
                     self.cube[2][tile] = left_face_row[tile]
                     self.cube[3][tile] = front_face_row[tile]
                     self.cube[4][tile] = right_face_row[tile]
+                self.cube[0] = self.counter_clockwise_face_rotation(self.cube[0])
 
         elif row == 2: #Bottom row D or D'
             # Get row information of current rows that will be edited
@@ -110,10 +111,78 @@ class RubiksCube:
                     self.cube[4][tile+6] = left_face_row[tile]
                 self.cube[5] = self.counter_clockwise_face_rotation(self.cube[5])
     
+    def vertical_turn(self, column, prime):
+        if(column == 0):  # Left column
+            columns = [0, 3, 6]
+            back_columns = [8, 5, 2]
+        elif(column == 1):  # Middle column
+            columns = [1, 4, 7]
+            back_columns = [7, 4, 1]
+        elif(column == 2):  # Right column
+            columns = [2, 5, 8]
+            back_columns = [6, 3, 0]
+
+        # Storing current configuration in temporary variables
+        top_face_column = [self.cube[0][i] for i in columns]
+        front_face_column = [self.cube[2][i] for i in columns]
+        bottom_face_column = [self.cube[5][i] for i in columns]
+        back_face_column = [self.cube[4][i] for i in back_columns]
+
+        if column == 0:
+            if not prime:  # L move
+                for i, col in enumerate(columns):
+                    self.cube[0][col] = back_face_column[i]
+                    self.cube[2][col] = top_face_column[i]
+                    self.cube[5][col] = front_face_column[i]
+                    self.cube[4][back_columns[i]] = bottom_face_column[i]
+                # Rotate left face clockwise
+                self.cube[1] = self.clockwise_face_rotation(self.cube[1])
+            else:  # L' move
+                for i, col in enumerate(columns):
+                    self.cube[0][col] = front_face_column[i]
+                    self.cube[2][col] = bottom_face_column[i]
+                    self.cube[5][col] = back_face_column[i]
+                    self.cube[4][back_columns[i]] = top_face_column[i]
+                # Rotate left face counter-clockwise
+                self.cube[1] = self.counter_clockwise_face_rotation(self.cube[1])
+        if column == 1:
+            if not prime:  # M move
+                for i, col in enumerate(columns):
+                    self.cube[0][col] = back_face_column[i]
+                    self.cube[2][col] = top_face_column[i]
+                    self.cube[5][col] = front_face_column[i]
+                    self.cube[4][back_columns[i]] = bottom_face_column[i]
+            else:  # M' move
+                for i, col in enumerate(columns):
+                    self.cube[0][col] = front_face_column[i]
+                    self.cube[2][col] = bottom_face_column[i]
+                    self.cube[5][col] = back_face_column[i]
+                    self.cube[4][back_columns[i]] = top_face_column[i]
+        if column == 2:
+            if not prime:  # R move
+                for i, col in enumerate(columns):
+                    self.cube[0][col] = front_face_column[i]
+                    self.cube[2][col] = bottom_face_column[i]
+                    self.cube[5][col] = back_face_column[i]
+                    self.cube[4][back_columns[i]] = top_face_column[i]
+                # Rotate right face clockwise
+                self.cube[3] = self.clockwise_face_rotation(self.cube[3])
+            else:  # R' move
+                for i, col in enumerate(columns):
+                    self.cube[0][col] = back_face_column[i]
+                    self.cube[2][col] = top_face_column[i]
+                    self.cube[5][col] = front_face_column[i]
+                    self.cube[4][back_columns[i]] = bottom_face_column[i]
+                # Rotate right face counter-clockwise
+                self.cube[3] = self.counter_clockwise_face_rotation(self.cube[3])
+        
+
+
+
 
 
 """
-    def verticle_turn(self, column, prime):
+    def vertical_turn(self, column, prime):
         This simulates a verticle turn.
         The column is given 0 being left, 1 being middle, and 2
         being the rightmost column.

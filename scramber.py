@@ -16,7 +16,8 @@ def scramble_conversion(scramble):
         "U": 3,
         "D": 4,
         "B": 5,
-        "F": 6
+        "F": 6,
+        "M": 7
     }
 
     moves = scramble.split(" ")
