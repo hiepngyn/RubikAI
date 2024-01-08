@@ -15,7 +15,7 @@ def main():
     rubiks_cube = RubiksCube()
 
     # Prepare the scramble moves
-    moves = scramble_conversion("U2")
+    moves = scramble_conversion("D D'")
     move_index = 0  # Index to track which move we are on
     last_move_time = 0
     move_delay = 1  # Delay in seconds between moves
